@@ -1,25 +1,56 @@
-
 import numpy as np
 
-# Spider configuration
+# =========================================================
+# CHROMOSOME SETTINGS
+# =========================================================
+
 num_joints = 24
 num_frames = 300
+chromosome_size = num_joints * num_frames
 
-#Temporary angles
-minimum_angle = -1.5
-maximum_angle = 1.5
+# Joint order to match ga_controller.py
+# R1, R2, R3, R4, L1, L2, L3, L4
+# Each leg: hip, thigh, knee
 
+# Webots motor limits, in radians.
+# A small margin keeps generated values away from the hard limits.
+hip_min = -1.561
+hip_max = 1.561
+
+thigh_min = -1.561
+thigh_max = 1.561
+
+knee_min = -1.990
+knee_max = 0.990
+
+# Repeat the three joint limits for all eight legs.
+minimum_angles = np.array(
+    [hip_min, thigh_min, knee_min] * 8
+)
+
+maximum_angles = np.array(
+    [hip_max, thigh_max, knee_max] * 8
+)
+
+
+# =========================================================
+# CREATE ONE CHROMOSOME
+# =========================================================
 
 def create_chromosome():
 
     chromosome = np.random.uniform(
-        minimum_angle,
-        maximum_angle,
-        (num_frames, num_joints)
+        low=minimum_angles,
+        high=maximum_angles,
+        size=(num_frames, num_joints)
     )
 
     return chromosome
 
+
+# =========================================================
+# CREATE A POPULATION
+# =========================================================
 
 def create_population(population_size):
 
