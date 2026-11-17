@@ -13,15 +13,17 @@ chromosome_size = num_joints * num_frames
 # Each leg: hip, thigh, knee
 
 # Webots motor limits, in radians.
+# From Webots, we found out the motor limits. 
+# Hip_max = 1.571, hip_min = -1.571, thigh_max = 1.571, thigh_min = -1.571, knee_max = 1.00, knee_min = -2.00
 # A small margin keeps generated values away from the hard limits.
-hip_min = -1.561
-hip_max = 1.561
+hip_min = -1.571
+hip_max = 1.571
 
-thigh_min = -1.561
-thigh_max = 1.561
+thigh_min = -1.571
+thigh_max = 1.571
 
-knee_min = -1.990
-knee_max = 0.990
+knee_min = -2.000
+knee_max = 1.000
 
 # Repeat the three joint limits for all eight legs.
 minimum_angles = np.array(
