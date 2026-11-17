@@ -1,45 +1,65 @@
 import numpy as np
 
+# =========================================================
+# CHROMOSOME SETTINGS
+# =========================================================
+
 num_joints = 24
+num_frames = 300
+chromosome_size = num_joints * num_frames
 
-"""
-For each joint, we have 3 parameters: offset, amplitude, and phase. This makes the total chromosome sizeequal to 
-3 times the number of joints.
-"""
-chromosome_size = num_joints * 3
+# Joint order to match ga_controller.py
+# R1, R2, R3, R4, L1, L2, L3, L4
+# Each leg: hip, thigh, knee
 
-"""
-Offset is the base position of the joint, amplitude is how much it moves from that base position, and phase is 
-the starting point of the movement in its cycle.
-"""
-offset_range = (-0.5, 0.5)
-amplitude_range = (0.0, 0.5)
-phase_range = (0.0, 2 * np.pi)
+# Webots motor limits, in radians.
+# From Webots, we found out the motor limits. 
+# Hip_max = 1.571, hip_min = -1.571, thigh_max = 1.571, thigh_min = -1.571, knee_max = 1.00, knee_min = -2.00
+# A small margin keeps generated values away from the hard limits.
+hip_min = -1.571
+hip_max = 1.571
 
+thigh_min = -1.571
+thigh_max = 1.571
+
+knee_min = -2.000
+knee_max = 1.000
+
+# Repeat the three joint limits for all eight legs.
+minimum_angles = np.array(
+    [hip_min, thigh_min, knee_min] * 8
+)
+
+maximum_angles = np.array(
+    [hip_max, thigh_max, knee_max] * 8
+)
+
+
+# =========================================================
+# CREATE ONE CHROMOSOME
+# =========================================================
 
 def create_chromosome():
-    """
-    Creates a random chromosome with parameters for each joint.
-    Each joint has an offset, amplitude, and phase.
-    """
 
-    offsets = np.random.uniform(offset_range[0], offset_range[1], num_joints)
-
-    amplitudes = np.random.uniform(amplitude_range[0], amplitude_range[1], num_joints)
-
-    phases = np.random.uniform(phase_range[0], phase_range[1], num_joints)
-
-
-    chromosome = np.concatenate([offsets, amplitudes, phases])
+    chromosome = np.random.uniform(
+        low=minimum_angles,
+        high=maximum_angles,
+        size=(num_frames, num_joints)
+    )
 
     return chromosome
 
+
+# =========================================================
+# CREATE A POPULATION
+# =========================================================
 
 def create_population(population_size):
 
     population = []
 
     for _ in range(population_size):
+
         chromosome = create_chromosome()
         population.append(chromosome)
 
