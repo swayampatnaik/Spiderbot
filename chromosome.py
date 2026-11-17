@@ -1,8 +1,5 @@
 import numpy as np
 
-# =========================================================
-# CHROMOSOME SETTINGS
-# =========================================================
 
 num_joints = 24
 num_frames = 300
@@ -15,7 +12,6 @@ chromosome_size = num_joints * num_frames
 # Webots motor limits, in radians.
 # From Webots, we found out the motor limits. 
 # Hip_max = 1.571, hip_min = -1.571, thigh_max = 1.571, thigh_min = -1.571, knee_max = 1.00, knee_min = -2.00
-# A small margin keeps generated values away from the hard limits.
 hip_min = -1.571
 hip_max = 1.571
 
@@ -35,9 +31,8 @@ maximum_angles = np.array(
 )
 
 
-# =========================================================
+
 # CREATE ONE CHROMOSOME
-# =========================================================
 
 def create_chromosome():
 
@@ -50,9 +45,8 @@ def create_chromosome():
     return chromosome
 
 
-# =========================================================
+
 # CREATE A POPULATION
-# =========================================================
 
 def create_population(population_size):
 
