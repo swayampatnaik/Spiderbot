@@ -5,8 +5,7 @@ import numpy as np
 num_joints = 24
 num_frames = 300
 
-# Temporary joint angle limits in radians.
-# These MUST be checked against the Webots motor limits.
+#Temporary angles
 minimum_angle = -1.5
 maximum_angle = 1.5
 
