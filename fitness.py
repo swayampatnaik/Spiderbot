@@ -6,18 +6,17 @@ def calculate_fitness(start_position, end_position):
     """
     Calculate horizontal distance travelled by the spider.
 
-    start_position: [x, y, z] at the start of the gait
-    end_position:   [x, y, z] at the end of the gait
+    Parameters:
+        start_position: GPS coordinates at the start (X, Y, Z).
+        end_position: GPS coordinates at the end (X, Y, Z).
 
-    Returns distance in metres.
+    Returns:
+        Horizontal distance between the two positions.
     """
 
-    start_x = start_position[0]
-    start_y = start_position[1]
+    change_x = end_position[0] - start_position[0]
+    change_y = end_position[1] - start_position[1]
 
-    end_x = end_position[0]
-    end_y = end_position[1]
+    fitness = math.sqrt(change_x ** 2 + change_y ** 2)
 
-    distance = math.sqrt((end_x - start_x) ** 2 + (end_y - start_y) ** 2)
-
-    return distance
+    return fitness
