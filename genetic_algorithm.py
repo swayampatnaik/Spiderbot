@@ -63,29 +63,25 @@ def crossover(parent1, parent2):
 
 #MUTATION FUNCTION
 
-def mutate(chromosome):
+def mutation(chromosome):
 
     # Make a copy so the original chromosome is not changed.
     mutated_chromosome = chromosome.copy()
 
-    # Generate a random number for every joint in every frame.
-    # Each value has a 30% chance of being selected for mutation.
+    # Decide which genes will be mutated.
     mutation_mask = np.random.random(chromosome.shape) < MUTATION_RATE
 
-    # Generate small random changes to the joint angles.
-    # Normal distribution uses 0 as the average change
-    # and mutation_strength as the standard deviation.
+    # Generate small random changes for the selected genes.
     random_changes = np.random.normal(
-        loc=0,
+        loc=0.0,
         scale=MUTATION_STRENGTH,
         size=chromosome.shape
     )
 
-    # Apply changes only to the genes selected by the mutation mask.
+    # Apply changes only to the genes selected.
     mutated_chromosome[mutation_mask] += random_changes[mutation_mask]
 
     # Keep every joint angle within its Webots motor limits.
-    # np.clip checks each joint against its own minimum and maximum.
     mutated_chromosome = np.clip(
         mutated_chromosome,
         minimum_angles,
