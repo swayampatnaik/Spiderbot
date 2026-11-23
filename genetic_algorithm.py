@@ -203,17 +203,59 @@ def save_generation(generation, population, fitness_scores):
 
 #MAIN GENETIC ALGORITHM FUNCTION/LOOP
 
-def genetic_algorithm():
+def genetic_algorithm(evaluate_population):
     print("Starting Genetic Algorithm...")
 
-    population = create_population(POPULATION_SIZE)
+    print("\nCreating initial population...")
+
+    population = np.array(create_population(POPULATION_SIZE))
 
     print("Population created with size:", len(population))
     print("Chromosome shape:", population[0].shape)
 
 
-    #main loop
+    #main evaluation loop
     for generation in range(NUM_GENERATIONS + 1):
-    #To be implemented
+
+        print("\nEvaluating generation:", generation)
+
+        # Evaluate the fitness of the population.
+        #fitness_scores = evaluate_population(population)
+
+        # Check that every chromosome has a fitness score.
+        if fitness_scores.shape != (POPULATION_SIZE,):
+
+            raise ValueError(
+                "The evaluator must return exactly "
+                f"{POPULATION_SIZE} fitness scores."
+            )
+
+        if not np.all(np.isfinite(fitness_scores)):
+
+            raise ValueError(
+                "Fitness scores contain invalid values."
+            )        
+
+        # Save the current generation's results.
+        save_generation(generation, population, fitness_scores)
+
+        # Stop after the final generation has been evaluated.
+        if generation == NUM_GENERATIONS:
+
+            break
+
+        # Create the next generation.
+        population = create_next_generation(population, fitness_scores)
+
+        print("Next generation created with population size:", len(population))
 
 
+    print("\nGenetic Algorithm completed.")
+
+
+
+if __name__ == "__main__":
+
+    # Run the genetic algorithm with the evaluate_population function.
+
+    run_genetic_algorithm(evaluate_population)
