@@ -101,8 +101,41 @@ def mutate(chromosome):
 
 def create_next_generation(population, fitness_scores):
     
+    #Create a new population using:
+
+    #1. Tournament selection
+    #2. Crossover
+    #3. Mutation
+
+    #The population size remains unchanged.
+
     new_population = []
-    #To be implemented
+    
+    
+    #GENERATE OFFSPRING
+    while len(new_population) < POPULATION_SIZE:
+
+        # Select two parents.
+        parent1 = selection(population, fitness_scores)
+
+        parent2 = selection(population, fitness_scores)
+
+        # Produce two offspring.
+        child1, child2 = crossover(parent1, parent2)
+
+        # Mutate the offspring.
+        child1 = mutation(child1)
+
+        child2 = mutation(child2)
+
+        # Add offspring to the new population.
+        new_population.append(child1)
+
+        if len(new_population) < POPULATION_SIZE:
+
+            new_population.append(child2)
+
+    return np.array(new_population)
 
 
 
