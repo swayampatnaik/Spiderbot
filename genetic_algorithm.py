@@ -145,6 +145,60 @@ def create_next_generation(population, fitness_scores):
 def save_generation(generation, population, fitness_scores):
     # Save the population and fitness scores to a CSV file
 
+    generation_file = os.path.join(results_folder, f"generation_{generation:03d}.npz")
+
+    np.savez_compressed(generation_file, chromosomes=population, fitness=fitness_scores)
+
+
+    # Calculate generation statistics.
+    best_fitness = np.max(fitness_scores)
+
+    average_fitness = np.mean(fitness_scores)
+
+    worst_fitness = np.min(fitness_scores)
+
+    fitness_std = np.std(fitness_scores)
+
+    best_index = np.argmax(fitness_scores)
+
+    # Save summary statistics.
+    statistics_file = os.path.join(results_folder,"generation_statistics.csv")
+
+    file_exists = os.path.exists(statistics_file)
+
+    with open(statistics_file, "a", newline="") as file:
+
+        writer = csv.writer(file)
+
+        if not file_exists:
+
+            writer.writerow([
+                "generation",
+                "best_fitness",
+                "average_fitness",
+                "worst_fitness",
+                "fitness_std",
+                "best_chromosome_index"
+            ])
+
+        writer.writerow([
+            generation,
+            best_fitness,
+            average_fitness,
+            worst_fitness,
+            fitness_std,
+            best_index
+        ])
+
+    print("\nGeneration:", generation)
+    print("Best fitness:", best_fitness)
+    print("Average fitness:", average_fitness)
+    print("Worst fitness:", worst_fitness)
+    print("Fitness standard deviation:", fitness_std)
+
+    print("Results saved:", generation_file)
+
+
 
 
 #MAIN GENETIC ALGORITHM FUNCTION/LOOP
