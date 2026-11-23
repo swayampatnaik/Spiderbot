@@ -8,23 +8,40 @@ from chromosome import (create_population, minimum_angles, maximum_angles)
 #PARAMETERS
 
 POPULATION_SIZE = 700
-#NUM_GENERATIONS = ??
+#NUM_GENERATIONS = 10
 
 #SELECTION PARAMETERS
-#TOURNAMENT_SIZE = ??
+#TOURNAMENT_SIZE = 3
 
 #CROSSOVER PARAMETERS
-#CROSSOVER_RATE = ??
+#CROSSOVER_RATE = 0.8
 
 #MUTATION PARAMETERS
-#MUTATION_RATE = ??
-#MUTATION_STRENGTH = ??
+#MUTATION_RATE = 0.001
+#MUTATION_STRENGTH = 0.1
+
+
+#RESULTS FOLDER PATH
+
+current_folder = os.path.dirname(os.path.abspath(__file__))
+
+results_folder = os.path.join(current_folder, "results")
+
 
 
 #SELECTION FUNCTION
 
 def selection():
-    #TO BE IMPLEMENTED
+
+    #Tournament selection.
+    #Randomly selects three chromosomes and returnsthe one with the highest fitness.
+
+    contestants = np.random.choice(len(population), size=TOURNAMENT_SIZE, replace=False)
+
+    best_contestant = contestants[np.argmax(fitness_scores[contestants])]
+
+    return population[best_contestant].copy()
+
 
 #CROSSOVER FUNCTION
 
@@ -77,6 +94,8 @@ def mutate(chromosome):
 
     # Return the chromosome after mutation.
     return mutated_chromosome
+
+
 
 #NEXT GENERATION FUNCTION
 
