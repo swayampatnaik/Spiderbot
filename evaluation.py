@@ -63,9 +63,7 @@ def read_evaluation_result():
     return start_position, end_position
 
 
-# =========================================================
 # EVALUATE ONE CHROMOSOME
-# =========================================================
 
 def evaluate_chromosome(chromosome):
 
