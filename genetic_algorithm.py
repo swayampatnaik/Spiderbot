@@ -8,17 +8,17 @@ from chromosome import (create_population, minimum_angles, maximum_angles)
 #PARAMETERS
 
 POPULATION_SIZE = 700
-#NUM_GENERATIONS = 10
+NUM_GENERATIONS = 3
 
 #SELECTION PARAMETERS
-#TOURNAMENT_SIZE = 3
+TOURNAMENT_SIZE = 3
 
 #CROSSOVER PARAMETERS
-#CROSSOVER_RATE = 0.8
+CROSSOVER_RATE = 0.8
 
 #MUTATION PARAMETERS
-#MUTATION_RATE = 0.001
-#MUTATION_STRENGTH = 0.1
+MUTATION_RATE = 0.001
+MUTATION_STRENGTH = 0.1
 
 
 #RESULTS FOLDER PATH
@@ -31,7 +31,7 @@ results_folder = os.path.join(current_folder, "results")
 
 #SELECTION FUNCTION
 
-def selection():
+def selection(population, fitness_scores):
 
     #Tournament selection.
     #Randomly selects three chromosomes and returnsthe one with the highest fitness.
@@ -216,7 +216,7 @@ def genetic_algorithm(evaluate_population):
         print("\nEvaluating generation:", generation)
 
         # Evaluate the fitness of the population.
-        #fitness_scores = evaluate_population(population)
+        fitness_scores = evaluate_population(population)
 
         # Check that every chromosome has a fitness score.
         if fitness_scores.shape != (POPULATION_SIZE,):
@@ -253,5 +253,6 @@ def genetic_algorithm(evaluate_population):
 if __name__ == "__main__":
 
     # Run the genetic algorithm with the evaluate_population function.
+    from evaluation import evaluate_population
 
-    run_genetic_algorithm(evaluate_population)
+    genetic_algorithm(evaluate_population)
