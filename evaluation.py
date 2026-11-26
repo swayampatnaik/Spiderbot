@@ -2,6 +2,7 @@
 import os
 import csv
 import numpy as np
+import time
 
 from fitness import calculate_fitness
 
@@ -69,70 +70,61 @@ def read_evaluation_result():
 
 # EVALUATE ONE CHROMOSOME
 
+
 def evaluate_chromosome(chromosome):
 
-    #Evaluate one chromosome using Webots.
-
-    #1. Save chromosome to gait.csv.
-    #2. Ask the user to run the Webots controller.
-    #3. Read the GPS results.
-    #4. Calculate fitness.
-
-
-    # SAVE GAIT
-    save_gait(chromosome)
-
-
-    # REMOVE OLD RESULTS
+    # Remove results and status from the previous evaluation.
     if os.path.exists(result_file):
-
         os.remove(result_file)
 
+    if os.path.exists(status_file):
+        os.remove(status_file)
 
-    # RUN WEBOTS
+    # Save the chromosome for Webots.
+    save_gait(chromosome)
 
+    # Tell Webots that a new chromosome is ready.
+    with open(run_request_file, "w") as file:
+        file.write("run")
 
-    print("\nCHROMOSOME READY FOR EVALUATION")
+    print("\nCHROMOSOME SENT TO WEBOTS")
+    print("Waiting for evaluation to finish...")
 
-    print("Run/restart the spider simulation in Webots.")
-    print("The controller will execute the gait.csv file.")
+    # Wait for Webots to finish.
+    timeout = 300
+    start_time = time.monotonic()
 
-    input(
-        "\nPress ENTER here once Webots has finished "
-        "the gait and generated evaluation_result.csv..."
-    )
+    while True:
 
+        if os.path.exists(status_file):
 
-    # CHECK RESULT FILE
-    if not os.path.exists(result_file):
+            with open(status_file, "r") as file:
+                status = file.read().strip()
 
-        raise FileNotFoundError(
-            "evaluation_result.csv was not created. "
-            "Check that the Webots controller completed successfully."
-        )
+            if status == "finished":
+                break
 
+        if time.monotonic() - start_time > timeout:
+            raise TimeoutError(
+                "Webots did not finish evaluating the chromosome."
+            )
 
-    # READ GPS
+        time.sleep(0.1)
+
+    # Read the GPS results.
     start_position, end_position = read_evaluation_result()
 
+    # Calculate fitness.
+    fitness = calculate_fitness(start_position, end_position)
 
-    # CALCULATE FITNESS
-    fitness = calculate_fitness(
-        start_position,
-        end_position
-    )
-
-
-    # DISPLAY RESULTS
-    print("\nCHROMOSOME EVALUATION COMPLETE")
-
+    print("\nCHROMOSOME EVALUATION COMPLETED")
     print("Starting position:", start_position)
-
     print("Ending position:", end_position)
-
     print("Fitness:", fitness)
 
     return fitness
+
+
 
 
 
