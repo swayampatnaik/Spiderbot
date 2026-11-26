@@ -148,7 +148,7 @@ def create_next_generation(population, fitness_scores):
 def save_generation(generation, population, fitness_scores):
     # Save the population and fitness scores to a CSV file
 
-    generation_file = os.path.join(results_folder, f"generation_{generation:03d}.npz")
+    generation_file = os.path.join(experiment_folder, f"generation_{generation:03d}.npz")
 
     np.savez_compressed(generation_file, chromosomes=population, fitness=fitness_scores)
 
@@ -167,14 +167,14 @@ def save_generation(generation, population, fitness_scores):
     # Save the best chromosome of the generation to a separate CSV file.
     best_chromosome = population[best_index]
 
-    best_chromosome_file = os.path.join(results_folder, f"best_chromosome_{generation:03d}.csv")
+    best_chromosome_file = os.path.join(experiment_folder, f"best_chromosome_{generation:03d}.csv")
 
     with open(best_chromosome_file, "w", newline="") as file:
         writer = csv.writer(file)
         writer.writerows(best_chromosome)
 
     # Save summary statistics.
-    statistics_file = os.path.join(results_folder,"generation_statistics.csv")
+    statistics_file = os.path.join(experiment_folder,"generation_statistics.csv")
 
     file_exists = os.path.exists(statistics_file)
 
