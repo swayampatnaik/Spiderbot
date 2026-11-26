@@ -28,8 +28,11 @@ from datetime import datetime
 current_folder = os.path.dirname(os.path.abspath(__file__))
 results_folder = os.path.join(current_folder, "results")
 
-experiment_name = datetime.now().strftime("experiment_%Y%m%d_%H%M%S")
+# Create results folder if it doesn't exist
+os.makedirs(results_folder, exist_ok=True)
 
+# Create a unique folder for this experiment
+experiment_name = datetime.now().strftime("experiment_%Y%m%d_%H%M%S")
 experiment_folder = os.path.join(results_folder, experiment_name)
 
 os.makedirs(experiment_folder, exist_ok=False)
