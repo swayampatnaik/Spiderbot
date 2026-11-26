@@ -18,6 +18,10 @@ gait_file = os.path.join(controller_folder, "gait.csv")
 
 result_file = os.path.join(controller_folder, "evaluation_result.csv")
 
+status_file = os.path.join(controller_folder, "status.txt")
+
+run_request_file = os.path.join(controller_folder, "run_request.txt")
+
 
 
 # SAVE CHROMOSOME AS GAIT CSV
