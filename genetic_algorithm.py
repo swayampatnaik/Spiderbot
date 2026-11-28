@@ -8,10 +8,13 @@ from chromosome import (create_population, minimum_angles, maximum_angles)
 #PARAMETERS
 
 POPULATION_SIZE = 700
-NUM_GENERATIONS = 10
+NUM_GENERATIONS = 25
 
 #SELECTION PARAMETERS
 TOURNAMENT_SIZE = 3
+
+#ELITISM PARAMETERS
+ELITE_COUNT = 2
 
 #CROSSOVER PARAMETERS
 CROSSOVER_RATE = 0.8
@@ -106,24 +109,24 @@ def mutation(chromosome):
 #NEXT GENERATION FUNCTION
 
 def create_next_generation(population, fitness_scores):
-    
-    #Create a new population using:
 
-    #1. Tournament selection
-    #2. Crossover
-    #3. Mutation
-
-    #The population size remains unchanged.
-
+    # Create a new population.
     new_population = []
-    
-    
-    #GENERATE OFFSPRING
+
+    # ELITISM
+    # Find the indices of the two chromosomes with the highest fitness.
+    elite_indices = np.argsort(fitness_scores)[-ELITE_COUNT:]
+
+    # Copy the elite chromosomes directly into the new population.
+    # Reverse the order so the best chromosome is first.
+    for index in elite_indices[::-1]:
+        new_population.append(population[index].copy())
+
+    # GENERATE THE REMAINING OFFSPRING
     while len(new_population) < POPULATION_SIZE:
 
         # Select two parents.
         parent1 = selection(population, fitness_scores)
-
         parent2 = selection(population, fitness_scores)
 
         # Produce two offspring.
@@ -131,18 +134,15 @@ def create_next_generation(population, fitness_scores):
 
         # Mutate the offspring.
         child1 = mutation(child1)
-
         child2 = mutation(child2)
 
         # Add offspring to the new population.
         new_population.append(child1)
 
         if len(new_population) < POPULATION_SIZE:
-
             new_population.append(child2)
 
     return np.array(new_population)
-
 
 
 
